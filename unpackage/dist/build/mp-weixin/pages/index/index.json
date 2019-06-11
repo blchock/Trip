@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "出行导游",
+  "usingComponents": {
+    "nav": "/pages/nav/nav",
+    "lists": "/pages/lists/lists"
+  }
+}

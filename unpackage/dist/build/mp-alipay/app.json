@@ -1,0 +1,12 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/nav/nav",
+    "pages/lists/lists"
+  ],
+  "window": {
+    "defaultTitle": "出行导游",
+    "titleBarColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  }
+}

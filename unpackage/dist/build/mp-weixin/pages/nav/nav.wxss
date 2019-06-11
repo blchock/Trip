@@ -1,0 +1,18 @@
+
+.navView.data-v-3d2dca0c {
+	white-space: nowrap;
+	width: 730rpx;
+	height: 80rpx;
+	padding: 8rpx 20rpx;
+	/* padding: 5upx; */
+}
+.badgeItem.data-v-3d2dca0c {
+	display: inline-block;
+	width: auto;
+	height: 65rpx;
+	margin-right: 25rpx;
+	line-height: 65rpx;
+	text-align: center;
+	font-size: 36rpx;
+}
+
