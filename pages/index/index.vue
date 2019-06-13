@@ -2,7 +2,7 @@
 	<view class="content">
 		<view class="map-content">
 			<!--index.wxml-->
-			<map id="mainMap" :longitude="longitude" :latitude="latitude" :markers="getMarkers" :covers="covers" show-location>
+			<map id="mainMap" :longitude="longitude" :latitude="latitude" :markers="getMarkers" show-location enable-traffic="true" @bindmarkertap="onMarkClick" @bindcallouttap="onMarkClick">
 			<cover-view class="aim">
 				<cover-image src="/static/aim.png" @click="aimPlayer"></cover-image>
 			</cover-view>
@@ -12,7 +12,7 @@
 			<Nav :items="items" @onSelect="onSelectNav" />
 		</view>
 		<view class="list-content">
-			<Lists :scrollTop="scrollTop" @scroll="scroll" />
+			<Lists :scrollTop="scrollTop" @scroll="scroll" @itemClick="itemClick" @itemNav="itemNav" @itemMore="itemMore" />
 		</view>
 	</view>
 </template>
@@ -27,7 +27,6 @@
 				latitude: 0,
 				speed: 0,
 				accuracy: 0,
-				covers: [],
 				scrollTop: 0,
 				old: {
 					scrollTop: 0
@@ -91,7 +90,7 @@
 				],
 			}
 		},
-		onLoad() {
+		onLoad(options) {
 			var that=this
 			wx.showLoading({
 			  title:"定位中",
@@ -112,6 +111,9 @@
 				that.speed = speed,
 				that.accuracy = accuracy
 				that.$store.dispatch("onMapReady");
+				// if (options.openMarker) {
+				// 	that.itemNav(options.openMarker);
+				// }
 			  },
 			  //定位失败回调
 			  fail:function(){
@@ -120,27 +122,63 @@
 				  icon:"none"
 				})
 			  },
-		 
 			  complete:function(){
 				//隐藏定位中信息进度
 				wx.hideLoading()
 			  }
-		 
 			})
 		},
 		methods: {
+			itemClick(index) {
+				let one = this.$store.getters.getList[index];
+				this.moveToMarker(one.location.lat,one.location.lng);
+			},
+			itemNav(index) {
+				this.NavTo(index);
+			},
+			itemMore(index) {
+				let one = this.$store.getters.getList[index];
+				uni.navigateTo({
+					url: '/pages/information/information?index=' + index
+				});
+				// uni.navigateBack({ delta: 1 }); //返回上 1 个页面
+			},
 			aimPlayer() {
 				let map = wx.createMapContext('mainMap');
 				map.moveToLocation();
 			},
-			startNav() {
-				uni.openLocation({
-					latitude: 25.0271210000,
-					longitude: 101.7632820000,
-					success: function() {
-						console.log('success');
-					}
-				});
+			moveToMarker(latitude,longitude) { // 切换到marker经纬度所在位置
+				var mapCtx = wx.createMapContext('mainMap')
+				// var latitude,longitude;
+				// mapCtx.getCenterLocation({
+				// 	success:function(res){
+				// 		latitude = res.latitude;
+				// 		longitude = res.longitude;
+				// 	}
+				// }) //获取当前地图的中心经纬度
+				mapCtx.includePoints({
+					padding:[10],
+					points:[{
+						latitude:latitude,
+						longitude:longitude
+					}]
+				})
+				mapCtx.translateMarker({
+					 markerId: 0,
+					 autoRotate: true,
+					 duration: 1000,
+					 destination: {
+						latitude:latitude,
+						longitude:longitude,
+					 },
+					 animationEnd() {
+						console.log('animation end')
+					 }
+				})
+				
+			},
+			onMarkClick(e) {
+				console.log(e.markerId)
 			},
 			onSelectNav(index) {
 				var that = this;
@@ -182,7 +220,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.content {
 		width: 750upx;
 	}

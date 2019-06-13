@@ -22,5 +22,37 @@ exports.install = function (Vue, options) {
 				}
 			}
 		});
+	},
+	
+	Vue.prototype.Strlen = (str) => {
+		var len = 0;
+		for (var i=0; i<str.length; i++) { 
+		 var c = str.charCodeAt(i); 
+		//单字节加1 
+		 if ((c >= 0x0001 && c <= 0x007e) || (0xff60<=c && c<=0xff9f)) { 
+		   len++; 
+		 } 
+		 else { 
+		  len+=2; 
+		 } 
+		} 
+		return len;
+	},
+	
+	// 发起导航
+	Vue.prototype.NavTo = (index) => {
+		let one = Vue.prototype.$store.getters.getList[index];
+		// uni.chooseLocation 选择目的地
+		// uni.getLocation 获取当前位置信息
+		uni.openLocation({ // 打开外置地图导航
+			latitude: one.location.lat,
+			longitude: one.location.lng,
+			name: one.title,
+			address: one.address,
+			success: function() {
+				// 调用地图成功
+			}
+		});
 	}
+	
 };

@@ -14,6 +14,10 @@
             "path" : "pages/lists/lists",
             "style" : {}
         }
+        ,{
+            "path" : "pages/information/information",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

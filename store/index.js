@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+
 const store = new Vuex.Store({
 	state: {
 		selectTag: null,
@@ -27,13 +28,28 @@ const store = new Vuex.Store({
 			state.marks = [];
 			for (let id in data) {
 				let one = data[id];
-				// console.log(one);
+				// console.log("pushMark:",one);
 				state.marks.push({
-					id: one.id,
-					title: one.title,
+					id: id,
+					// title: one.title,
 					iconPath: "/static/mark.png",
 					latitude: one.location.lat,
 					longitude: one.location.lng,
+					zIndex: id,
+					label: {
+						content: one.title,
+						color: "#FF7F00",
+						fontSize: 12,
+						anchorX: -12 * Vue.prototype.Strlen(one.title) / 4,
+						anchorY: -60,
+						borderWidth: 1,
+						borderColor: "#FF4500",
+						borderRadius: 3,
+						bgColor: "#FFFAFA",
+						padding: 1,
+						textAlign: "center"
+					},
+					alpha: 0.8,
 					width: 30,
 					height: 37
 				});
